@@ -7,17 +7,20 @@
 // public api's to use
 // https://github.com/public-apis/public-apis
 
+import {ph_cl_id, wea_cl_id} from "./det.js"
+
 try {
-    const res = await fetch("https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature")
+    const res = await fetch(`https://api.unsplash.com/photos/random?orientation=landscape&query=nature&client_id=${ph_cl_id}`)
+    //const res = await fetch("https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature")
     const data = await res.json()
-    console.log(data.user.regular)
+    // console.log(data.user.regular)
     document.body.style.backgroundImage = `url(${data.urls.regular})`
     document.getElementById("Author").textContent = `By: ${data.user.name}`
 }
 catch (err) {
     document.body.style.backgroundImage = `url(https://images.unsplash.com/photo-1560008511-11c63416e52d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMTEwMjl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjI4NDIxMTc&ixlib=rb-1.2.1&q=80&w=1080
                                             )`
-    document.getElementById("author").textContent = `By: Dodi Achmad`
+    document.getElementById("Author").textContent = `By: Dodi Achmad`
 }
   
 try {
@@ -55,16 +58,14 @@ navigator.geolocation.getCurrentPosition(async position => {
     
     try {
         
-        const res = await fetch(`https://apis.scrimba.com/openweathermap/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial`)
+        // const res = await fetch(`https://apis.scrimba.com/openweathermap/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial`)
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial&appid=${wea_cl_id}`)
         if (!res.ok) {
             throw Error("Weather data not available")
         }
-        const data = await res.json()     
-            // console.log(data)
-            // console.log("temp is", Math.round(data.main.temp))
-            // console.log("name ", data.name)
-            // https://openweathermap.org/weather-conditions    
+        const data = await res.json()        
             let url = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+            // console.log("url is "+ url)
             document.getElementById("weather").innerHTML = 
                 `
                     <img src=${url} />
